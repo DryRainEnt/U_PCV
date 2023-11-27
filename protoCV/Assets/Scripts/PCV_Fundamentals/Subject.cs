@@ -1,6 +1,9 @@
-﻿namespace PCV_Fundamentals
+﻿using System;
+
+namespace PCV_Fundamentals
 {
-	public class Subject
+	[Serializable]
+	public class Subject : Object
 	{
 		
 	}

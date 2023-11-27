@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using PCV_Fundamentals;
 
-namespace PCV_Fundamentals
+namespace PCV_Interfaces
 {
 	public class SubjectList : MonoBehaviour
 	{

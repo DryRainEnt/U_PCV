@@ -7,8 +7,10 @@ namespace PCV_Fundamentals
 	[Serializable]
 	public class Object
 	{
-		public long oId;
+		public ulong oId;
 		public string oName;
+
+		public ulong[] iRelations;
 	}
 
 }
