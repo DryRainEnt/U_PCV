@@ -1,10 +1,10 @@
 ﻿namespace PCV_Fundamentals
 {
-	public delegate Subject OnSubjectCreatedDelegate(Subject subject);
-	public delegate Subject OnSubjectDeletedDelegate(Subject subject);
-	public delegate Subject OnSubjectListAddedDelegate(Subject subject);
-	public delegate Subject OnSubjectListRemovedDelegate(Subject subject);
-	public delegate int OnSubjectMovedDelegate(Subject subject, int oldIndex, int newIndex);
+	public delegate PCV_Subject OnSubjectCreatedDelegate(PCV_Subject subject);
+	public delegate PCV_Subject OnSubjectDeletedDelegate(PCV_Subject subject);
+	public delegate PCV_Subject OnSubjectListAddedDelegate(PCV_Subject subject);
+	public delegate PCV_Subject OnSubjectListRemovedDelegate(PCV_Subject subject);
+	public delegate int OnSubjectMovedDelegate(PCV_Subject subject, int oldIndex, int newIndex);
 	
 	public static class SubjectExtensions
 	{

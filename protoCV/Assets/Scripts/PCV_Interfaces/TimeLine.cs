@@ -1,53 +1,101 @@
-﻿using PCV_Fundamentals;
+﻿using System;
+using System.Collections.Generic;
+using PCV_Fundamentals;
 using UnityEngine;
 
 namespace PCV_Interfaces
 {
-	public class TimeLine : MonoBehaviour
+	public enum TimeLineType
+	{
+		Regular,
+		Irregular,
+	}
+	
+	public class TimeLine : Singleton<TimeLine>
 	{
 		public float heightMult = 1f;
 		
 		// 세계관에 따라 유동적으로 변할 수 있는 시간의 개념을 담아낼 수 있는 기준이 필요함
 		public CustomTime time;
 
+		public ulong minTime = ulong.MinValue;
+		public ulong maxTime = ulong.MaxValue;
+
 		public void Initiate()
 		{
-			// Test Code
-			time = new CustomTime()
+			time = new CustomTime();
+		}
+
+		private string GetTimeUnitString(TimeTokenSet t, TimeTokenUnit unit)
+		{
+			string result = "";
+			
+			// 특정 시간 토큰을 파싱하여 지정 단위의 문자열로 반환하는 함수
+			switch (unit)
 			{
-				unit = new CustomTimeUnit()
-				{
-					regularSecondsPerMinute = 60,
-					regularMinutesPerHour = 60,
-					regularHoursPerDay = 24,
-					regularDaysPerMonth = 30,
-					regularMonthsPerYear = 12,
-					regularYearsPerEra = 100,
-					regularZeroPoint = 31526042400,
-				},
-				irregularDaysPerMonth = new ulong[]
-				{
-					31,
-					28,
-					31,
-					30,
-					31,
-					30,
-					31,
-					31,
-					30,
-					31,
-					30,
-					31,
-				},
-				secondUnitName = "s",
-				minuteUnitName = "m",
-				hourUnitName = "h",
-				dayUnitName = "D",
-				monthUnitName = "M",
-				yearUnitName = "Y",
-				eraUnitName = "c",
-			};
+				case TimeTokenUnit.Era:
+					result = $"{t.era}{time.eraUnitName} ";
+					break;
+				case TimeTokenUnit.Year:
+					result = $"{t.year}{time.yearUnitName} ";
+					break;
+				case TimeTokenUnit.Month:
+					result = $"{t.month}{time.monthUnitName} ";
+					break;
+				case TimeTokenUnit.Day:
+					result = $"{t.day}{time.dayUnitName} ";
+					break;
+				case TimeTokenUnit.Hour:
+					result = $"{t.hour}{time.hourUnitName} ";
+					break;
+				case TimeTokenUnit.Minute:
+					result = $"{t.minute}{time.minuteUnitName} ";
+					break;
+				case TimeTokenUnit.Second:
+					result = $"{t.second}{time.secondUnitName} ";
+					break;
+			}
+			
+			return result;
+		}
+
+		public string GetTimeString(ulong t, TimeTokenUnit unitUse)
+		{
+			string result = "";
+			TimeTokenSet timeToken = time.GetTimeToken(t);
+
+			// 특정 시간 토큰을 파싱하여 플래그로 포함된 단위 조합의 문자열로 반환하는 함수
+			// unitUse에 포함된 단위만 반환함
+			if (unitUse.HasFlag(TimeTokenUnit.Era))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Era);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Year))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Year);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Month))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Month);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Day))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Day);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Hour))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Hour);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Minute))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Minute);
+			}
+			if (unitUse.HasFlag(TimeTokenUnit.Second))
+			{
+				result += GetTimeUnitString(timeToken, TimeTokenUnit.Second);
+			}
+			
+			return result;
 		}
 	}
 }
