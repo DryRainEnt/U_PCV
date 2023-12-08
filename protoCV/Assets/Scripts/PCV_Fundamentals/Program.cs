@@ -12,6 +12,7 @@ namespace PCV_Fundamentals
 		public Transform UIParent;
 
 		public GameObject SelectMenuPrefab;
+		public GameObject TimeMarkerPrefab;
 		
 		public Transform InfoBoxParent;
 		public GameObject InfoBoxPrefab;
@@ -22,6 +23,10 @@ namespace PCV_Fundamentals
 		private List<InfoBox> _infoBoxes = new List<InfoBox>();
 		
 		private Action<GameObject> _onDeselect;
+		
+		public MonoBehaviour selectedObject;
+
+		public Action _onDataModifiedCallback;
     
 		// Start is called before the first frame update
 		void Start()
@@ -35,13 +40,27 @@ namespace PCV_Fundamentals
         
 		}
 		
-		public void GenerateInfoBox(ulong iobj, ulong iinfoNode)
+		public InfoBox GenerateInfoBox(ulong iobj, ulong iinfoNode)
 		{
+			Debug.Log($"Generating info box for {iobj}");
 			GameObject infoBoxObject = Instantiate(InfoBoxPrefab, InfoBoxParent);
 			InfoBox infoBox = infoBoxObject.GetComponent<InfoBox>();
 			infoBox.LoadInfo(iobj, iinfoNode);
 			_infoBoxes.Add(infoBox);
+
+			return infoBox;
 		}
+
+		public void ListenForModification(Action action)
+		{
+			_onDataModifiedCallback += action;
+		}
+		
+		public void StopListeningForModification(Action action)
+		{
+			_onDataModifiedCallback -= action;
+		}
+		
 
 		public void ListenForDeselect(Action<GameObject> action)
 		{
@@ -66,7 +85,7 @@ namespace PCV_Fundamentals
 			selectMenu.Initiate(options);
 			return selectMenu;
 		}
-
+		
 		public void OnDatabaseModified()
 		{
 			int subCount = DatabaseManager.GetSubjectQuery().Length;
@@ -76,6 +95,8 @@ namespace PCV_Fundamentals
 			debugText.text = $"Subjects: {subCount}\n" +
 			                 $"Events: {evCount}\n" +
 			                 $"InfoNodes: {infoCount}";
+			
+			_onDataModifiedCallback?.Invoke();
 		}
 	}
 

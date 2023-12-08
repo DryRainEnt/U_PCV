@@ -43,6 +43,13 @@ namespace PCV_Fundamentals
 		public ulong month;
 		public ulong year;
 		public ulong era;
+		
+		public static TimeTokenSet operator ++(TimeTokenSet t)
+		{
+			t.token++;
+			return t;
+		}
+		
 	}
 	
 	[Serializable]

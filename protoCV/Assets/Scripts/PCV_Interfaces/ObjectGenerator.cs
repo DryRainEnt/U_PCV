@@ -8,11 +8,12 @@ using UnityEngine.Serialization;
 namespace PCV_Interfaces
 {
     
-    public enum GenerateType
+    public enum PCV_ObjectTypeEnum
     {
         Subject,
         Event,
-        InfoNode
+        InfoNode,
+        Object,
     }
     
     public enum GenerateState
@@ -35,7 +36,7 @@ namespace PCV_Interfaces
         [SerializeField]
         private GenerateState state;
         
-        public async Task<PCV_Fundamentals.PCV_Object> GenerateObject(GenerateType type)
+        public async Task<PCV_Fundamentals.PCV_Object> GenerateObject(PCV_ObjectTypeEnum typeEnum)
         {
             uiField.SetActive(true);
             
@@ -48,15 +49,15 @@ namespace PCV_Interfaces
             
             if (state == GenerateState.Done)
             {
-                switch (type)
+                switch (typeEnum)
                 {
-                    case GenerateType.Subject:
+                    case PCV_ObjectTypeEnum.Subject:
                         output = new PCV_Subject(input);
                         break;
-                    case GenerateType.Event:
+                    case PCV_ObjectTypeEnum.Event:
                         output = new PCV_Event(input);
                         break;
-                    case GenerateType.InfoNode:
+                    case PCV_ObjectTypeEnum.InfoNode:
                         output = new PCV_InfoNode(input);
                         break;
                 }

@@ -1051,7 +1051,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &761330236
 MonoBehaviour:
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299cfc47fa7e4c529e711823ddc393a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightMult: 1
+  secondsPerUnit: 10
   time:
     secondUnitInfo: 0
     minuteUnitInfo: 0
@@ -1394,6 +1394,8 @@ MonoBehaviour:
     monthUnitName: "\uC6D4"
     yearUnitName: "\uB144"
     eraUnitName: "\uC138\uAE30"
+  timeLineArea: {fileID: 1648010407}
+  timeMarkerPrefab: {fileID: 176944270418303446, guid: 42c1bfc8e3c42bb4bba0f413c4af0991, type: 3}
   minTime: 63082281600
   maxTime: 64691701140
 --- !u!1 &927597414
@@ -2877,9 +2879,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIParent: {fileID: 2091496669}
   SelectMenuPrefab: {fileID: 1913419054956004925, guid: a68af2e1e7280894fa319f3304bc8aaa, type: 3}
+  TimeMarkerPrefab: {fileID: 0}
   InfoBoxParent: {fileID: 936831361}
   InfoBoxPrefab: {fileID: 7665219796131438319, guid: c1f1b92dbf2edca4e959445adffe4a25, type: 3}
   debugText: {fileID: 1954983818}
+  selectedObject: {fileID: 0}
 --- !u!4 &2018790557
 Transform:
   m_ObjectHideFlags: 0

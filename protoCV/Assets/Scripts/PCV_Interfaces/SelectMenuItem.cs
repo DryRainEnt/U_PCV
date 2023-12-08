@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PCV_Interfaces
 {
@@ -10,6 +11,7 @@ namespace PCV_Interfaces
         public SelectMenu parentMenu;
 
         [SerializeField] private TMP_Text label;
+        [SerializeField] private Button button;
         
         public string Label
         {
@@ -19,7 +21,12 @@ namespace PCV_Interfaces
         public Action onSelect;
         public Action onDeselect;
         public Action onUse;
-        
+
+        private void Awake()
+        {
+            button.onClick.AddListener(Use);
+        }
+
         public void Select()
         {
             parentMenu.SelectedIndex = index;

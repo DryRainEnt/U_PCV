@@ -15,7 +15,7 @@ namespace PCV_Interfaces
 		
 		public async void OnAddSubjectButton()
 		{
-			PCV_Subject newSubject = await ObjectGenerator.Instance.GenerateObject(GenerateType.Subject) as PCV_Subject;
+			PCV_Subject newSubject = await ObjectGenerator.Instance.GenerateObject(PCV_ObjectTypeEnum.Subject) as PCV_Subject;
 			
 			if (newSubject == null)
 			{

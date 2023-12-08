@@ -1,4 +1,5 @@
 ﻿using PCV_Fundamentals;
+using TMPro;
 using UnityEngine;
 
 namespace PCV_Interfaces
@@ -6,12 +7,20 @@ namespace PCV_Interfaces
 	public class EventHeader : MonoBehaviour
 	{
 		public ulong iEvent;
-		public PCV_Fundamentals.PCV_Event targetEvent;
+		public PCV_Event targetEvent;
 
-		public void Initiate(ulong iEvent)
+		[SerializeField] private RectTransform rectTransform;
+		[SerializeField] private TMP_Text label ;
+		
+		public void Initiate(ulong eventID)
 		{
-			this.iEvent = iEvent;
-			targetEvent = DatabaseManager.objectCache[iEvent] as PCV_Fundamentals.PCV_Event;
+			iEvent = eventID;
+			targetEvent = DatabaseManager.objectCache[iEvent] as PCV_Event;
+
+			if (targetEvent != null)
+			{
+				label.text = targetEvent.oName;
+			}
 		}
 	}
 }

@@ -12,6 +12,7 @@ namespace PCV_Fundamentals
 		
 		public ulong startTime;
 		public ulong endTime;
+		public ulong duration => endTime - startTime;
 
 		public Actant actant;
 		

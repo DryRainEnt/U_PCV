@@ -13,17 +13,64 @@ namespace PCV_Interfaces
 	
 	public class TimeLine : Singleton<TimeLine>
 	{
-		public float heightMult = 1f;
+		public float secondsPerUnit = 10f;
 		
 		// 세계관에 따라 유동적으로 변할 수 있는 시간의 개념을 담아낼 수 있는 기준이 필요함
 		public CustomTime time;
 
-		public ulong minTime = ulong.MinValue;
-		public ulong maxTime = ulong.MaxValue;
+		[SerializeField] private RectTransform timeLineArea;
+		[SerializeField] private GameObject timeMarkerPrefab;
+
+		public ulong minTime = ulong.MaxValue;
+		public ulong maxTime = ulong.MinValue;
+		
+		public float TimeLineHeight => timeLineArea.sizeDelta.y;
+		public float GetTimelinePosition(ulong t)
+		{
+			return (t - minTime) / secondsPerUnit;
+		}
 
 		public void Initiate()
 		{
 			time = new CustomTime();
+		}
+
+		public TimeMarker CreateTimeMarker(EventStream stream, bool isStart)
+		{
+			var go = Instantiate(timeMarkerPrefab, timeLineArea);
+			var marker = go.GetComponent<TimeMarker>();
+			
+			marker.SyncTime(stream, isStart);
+
+			return marker;
+		}
+		
+		public (TimeMarker, TimeMarker) CreateTimeMarkerSet(EventStream stream)
+		{
+			return (CreateTimeMarker(stream, true), CreateTimeMarker(stream, false));
+		}
+		
+		public void UpdateTimeRange(ulong t)
+		{
+			if (t < minTime)
+			{
+				minTime = t;
+			}
+			if (t > maxTime)
+			{
+				maxTime = t;
+			}
+		}
+		
+		public void UpdateTimeRange(ulong min, ulong max)
+		{
+			minTime = min;
+			maxTime = max;
+		}
+
+		public void UpdateTimeRange()
+		{
+			timeLineArea.sizeDelta = new Vector2(timeLineArea.sizeDelta.x, (maxTime - minTime) / secondsPerUnit);
 		}
 
 		private string GetTimeUnitString(TimeTokenSet t, TimeTokenUnit unit)

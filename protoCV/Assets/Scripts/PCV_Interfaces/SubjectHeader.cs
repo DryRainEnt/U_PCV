@@ -49,7 +49,7 @@ namespace PCV_Interfaces
 				Program.Instance.ListenForDeselect(Deselect);
 			}
 			// if click point is out of bounds, destroy cached menu
-			else
+			else if (_selectMenu)
 			{
 				Program.Instance.OnDeselect(_selectMenu.gameObject);
 			}

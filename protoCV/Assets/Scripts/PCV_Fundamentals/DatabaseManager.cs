@@ -22,6 +22,22 @@ namespace PCV_Fundamentals
 
 			return result.ToArray();
 		}
+
+		public static (ulong, ulong) GetMinMaxTime()
+		{
+			var events = GetEventQuery();
+			
+			var min = ulong.MaxValue;
+			var max = ulong.MinValue;
+
+			foreach (var ev in events)
+			{
+				min = Math.Min(min, ((PCV_Event)objectCache[ev]).startTime);
+				max = Math.Max(max, ((PCV_Event)objectCache[ev]).endTime);
+			}
+
+			return (min, max);
+		}
 		
 		public static ulong[] GetEventQuery(ulong subjectId)
 		{

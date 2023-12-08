@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PCV_Fundamentals;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace PCV_Interfaces
 {
 	public class SubjectColumn : MonoBehaviour, IPointerClickHandler
 	{
+		public ulong targetId;
+		
 		public SubjectHeader header;
 		public Transform eventStreamParent;
 		public GameObject eventStreamPrefab;
@@ -18,15 +21,29 @@ namespace PCV_Interfaces
 		
 		public void Initiate(ulong id)
 		{
-			header.Initiate(id);
+			targetId = id;
+			LoadSubject();
+			
+			Program.Instance.ListenForModification(LoadSubject);
+		}
+
+		private void LoadSubject()
+		{
+			header.Initiate(targetId);
 			foreach (var ev in header.target.events)
 			{
 				var newEventStream = Instantiate(eventStreamPrefab, eventStreamParent).GetComponent<EventStream>();
-				newEventStream.LoadEvent(ev);
+				newEventStream.Initiate(ev);
 				AddEventStream(newEventStream);
 			}
 		}
+
+		private void OnDestroy()
+		{
+			Program.Instance.StopListeningForModification(LoadSubject);
+		}
 		
+
 		public void AddEventStream(EventStream eventStream)
 		{
 			eventStream.transform.SetParent(eventStreamParent);
@@ -55,10 +72,10 @@ namespace PCV_Interfaces
 					null, null,() =>
 					{
 						var newEvent = new PCV_Event($"E{header.targetId}-{eventStreams.Count}");
-						DatabaseManager.RegisterObject(newEvent);
 						var eStream = Instantiate(eventStreamPrefab, eventStreamParent).GetComponent<EventStream>();
-						eStream.LoadEvent(newEvent.oId);
+						eStream.Initiate(newEvent.oId);
 						
+						Program.Instance.GenerateInfoBox(newEvent.oId, newEvent.iInfoNode);
 						Deselect(_selectMenu.gameObject);
 					}),
 					new SelectMenuCall("Empty", 
@@ -67,7 +84,7 @@ namespace PCV_Interfaces
 				Program.Instance.ListenForDeselect(Deselect);
 			}
 			// if click point is out of bounds, destroy cached menu
-			else
+			else if (_selectMenu)
 			{
 				Program.Instance.OnDeselect(_selectMenu.gameObject);
 			}
